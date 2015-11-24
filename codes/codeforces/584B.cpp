@@ -2,25 +2,28 @@
 #include <cstdio>
 using namespace std;
 
+typedef long long ll;
+const int mod = 1e9 + 7;
+
+ll Pow(ll a, ll n) {
+	ll rt = 1;
+	while (n) {
+		if (n & 1) rt = (rt * a) % mod;
+		a = (a * a) % mod;
+		n >>= 1;
+	}
+	return rt;
+}
+
 int main() {
 #ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
 #endif
 
-	int t, n;
-	scanf("%d%d", &t, &n);
-	if (n == 10) {
-		if (t == 1) {
-			puts("-1");
-			return 0;
-		}
-		putchar('1');
-		t--;
-		n = 0;
-	}
-	while (t--)
-		putchar('0' + n);
-	puts("");
+	int n;
+	scanf("%d", &n);
+	ll ans = ((Pow(3, 3 * n) - Pow(7, n)) % mod + mod) % mod;
+	printf("%lld\n", ans);
 
 	return 0;
 }
