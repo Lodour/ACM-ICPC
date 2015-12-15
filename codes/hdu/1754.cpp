@@ -1,112 +1,88 @@
 #include <iostream>
 #include <iomanip>
+#include <functional>
 #include <algorithm>
 #include <vector>
-#include <sstream>
+#include <string>
 #include <queue>
 #include <stack>
-#include <string>
-#include <functional>
 #include <set>
 #include <map>
-#include <iterator>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
+#include <climits>
 #include <cctype>
 using namespace std;
-#define INF 0x3FFFFFFF
-#define MP(X,Y) make_pair(X,Y)
-#define PB(X) push_back(X)
-#define REP(i,x) for(int i=0;i<(int)(x);i++)
-#define REP2(X,L,R) for(int X=(int)L;X<=(int)R;X++)
-#define DEP(i,x) for(int i=((int)(x)-1);i>=0;i--)
-#define DEP2(X,L,R) for(int X=(int)L;X>=(int)R;X--)
-#define FOR(i,c) for(__typeof((c).begin())i=(c).begin();i!=(c).end();i++)
-#define CLR(A,X) memset(A,X,sizeof(A))
-#define ALL(container) (container).begin(), (container).end()
-#define sz(container) ((int)container.size())
-#define UNIQUE(v) sort(ALL(v)); v.erase( unique(v.begin(), v.end()), v.end() );
-#define IT iterator
+#define REP(i,x) for (int i = 0; i < (x); i++)
+#define DEP(i,x) for (int i = (x) - 1; i >= 0; i--)
+#define FOR(i,x) for (__typeof((x).begin())i = (x).begin(); i != (x).end(); i++)
+#define CLR(a,x) memset(a, x, sizeof(a))
+#define ALL(x) (x).begin(), (x).end()
+#define SZ(v) ((int)v.size())
+#define UNIQUE(v) sort(ALL(v)); v.erase(unique(ALL(v)), v.end())
+#define debug(x) cout << #x << ": " << x << endl;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef pair<int, int> PII;
-typedef pair<PII, int> PPI;
 typedef vector<int> VI;
-#define fi first
-#define se second
-const double EPS = 1e-8;
-//const int MOD = 1000000007;
-#define debug(x) cout<<#x<<": "<<x<<endl;
-#define debug2(x,y) cout<<#x<<": "<<x<<"\t"<<#y<<": "<<y<<endl;
-/****************************************************************************/
-int num[200200];
-int t[800800];
-void creat(int x, int left, int right)
-{
-    if (left == right)
-    {
-        t[x] = num[left];
-        return;
-    }
-    creat(x * 2, left, (left + right) / 2);
-    creat(x * 2 + 1, (left + right) / 2 + 1, right);
-    t[x] = max(t[x * 2], t[x * 2 + 1]);
+typedef vector<PII> VII;
+#define INF 0x3f3f3f3f
+#define MOD 1000000007
+#define eps 1e-8
+#define mp(x,y) make_pair(x,y)
+#define pb(x) push_back(x)
+#define IT iterator
+#define X first
+#define Y second
+//************************************************
+
+#define lson rt<<1
+#define rson rt<<1|1
+#define Lson l,m,lson
+#define Rson m+1,r,rson
+
+const int maxn = 200010;
+int ma[maxn << 2];
+void PushUp(int rt) {
+    ma[rt] = max(ma[lson], ma[rson]);
 }
-void add(int x, int left, int right, int pos, int q)
-{
-    if (left == right && right == pos)
-    {
-        t[x] = q;
-        return;
-    }
-    if (pos <= (left + right) / 2)
-    {
-        add(x * 2, left, (left + right) / 2, pos, q);
-    }
-    else
-    {
-        add(x * 2 + 1, (left + right) / 2 + 1, right, pos, q);
-    }
-    t[x] = max(t[x * 2], t[x * 2 + 1]);
+void build(int l, int r, int rt) {
+    if (l == r) {scanf("%d", &ma[rt]); return;}
+    int m = (l + r) >> 1;
+    build(Lson); build(Rson);
+    PushUp(rt);
 }
-int count(int x, int left, int right, int lb, int rb)
-{
-    if (left == lb && right == rb)
-    {
-        return t[x];
-    }
-    if (rb <= (left + right) / 2)
-    {
-        return count(x * 2, left, (left + right) / 2, lb, rb);
-    }
-    else if (lb > (left + right) / 2)
-    {
-        return count(x * 2 + 1, (left + right) / 2 + 1, right, lb, rb);
-    }
-    else
-    {
-        return max(count(x * 2, left, (left + right) / 2, lb, (left + right) / 2), count(x * 2 + 1, (left + right) / 2 + 1, right, (left + right) / 2 + 1, rb));
-    }
+void update(int p, int val, int l, int r, int rt) {
+    if (l == r) {ma[rt] = val; return;}
+    int m = (l + r) >> 1;
+    if (p <= m) update(p, val, Lson);
+    else update(p, val, Rson);
+    PushUp(rt);
+}
+int query(int L, int R, int l, int r, int rt) {
+    if (L <= l && r <= R) return ma[rt];
+    int m = (l + r) >> 1, s = 0;
+    if (L <= m) s = max(s, query(L, R, Lson));
+    if (m < R) s = max(s, query(L, R, Rson));
+    return s;
 }
 
 int main() {
-#ifndef ONLINE_JUDGE
+#ifdef MANGOGAO
     freopen("data.in", "r", stdin);
+    // freopen("data.out", "w", stdout);
 #endif
 
     int n, m;
     while (~scanf("%d%d", &n, &m)) {
-        REP2(i, 1, n) scanf("%d", &num[i]);
-        creat(1, 1, n);
+        build(1, n, 1);
+        char op[2]; int i, j;
         while (m--) {
-            char op;
-            int i, j;
-            getchar();
-            scanf("%c %d %d", &op, &i, &j);
-            if (op == 'U') add(1, 1, n, i, j);
-            else printf("%d\n", count(1, 1, n, i, j));
+            scanf("%s %d %d", op, &i, &j);
+            if (op[0] == 'Q') printf("%d\n", query(i, j, 1, n, 1));
+            else update(i, j, 1, n, 1);
         }
     }
 
