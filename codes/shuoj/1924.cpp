@@ -1,33 +1,31 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
-const int inf = 0x3f3f3f3f;
+int a[1010];
 
 int main() {
 #ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
 #endif
 
-	int n, k, a[1010];
+	int n, k;
 	while (~scanf("%d%d", &n, &k)) {
 		for (int i = 0; i < n; i++)
-			scanf("%d", &a[i]);
+			scanf("%d", a + i);
 		sort(a, a + n);
-		double ans = inf;
-		double sx2 = 0.0, sx = 0.0;
+		double ans = -1u >> 1;
+		double sx = 0, sx2 = 0;
 		for (int i = 0; i < k; i++) {
-			sx2 += a[i] * a[i];
 			sx += a[i];
+			sx2 += a[i] * a[i];
 		}
-		for (int i = 0; i <= n - k; i++) {
+		for (int i = 0; i + k <= n; i++) {
 			ans = min(ans, sx2 / k - sx * sx / k / k);
-			sx2 = sx2 - a[i] * a[i] + a[i + k] * a[i + k];
-			sx = sx - a[i] + a[i + k];
+			sx += a[i + k] - a[i];
+			sx2 += a[i + k] * a[i + k] - a[i] * a[i];
 		}
 		printf("%.2lf\n", ans);
 	}
+
 	return 0;
 }
