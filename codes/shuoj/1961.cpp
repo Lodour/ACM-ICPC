@@ -1,7 +1,5 @@
-#include <iostream>
-#include <cstdio>
+#include <bits/stdc++.h>
 using namespace std;
-//************************************************
 
 int main() {
 #ifdef MANGOGAO
@@ -10,8 +8,6 @@ int main() {
 
 	int a, b;
 	while (~scanf("%d%d", &a, &b))
-		if ((a & 1) | (b & 1)) puts("77");
-		else puts("CC");
-
+		puts((a & 1) | (b & 1) ? "77" : "CC");
 	return 0;
 }

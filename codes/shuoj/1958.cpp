@@ -1,6 +1,4 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
+#include <bits/stdc++.h>
 using namespace std;
 
 int solve(int a, int b) {
@@ -10,8 +8,9 @@ int solve(int a, int b) {
 }
 
 int main() {
-#ifndef ONLINE_JUDGE
+#ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
+	// freopen("data.out", "w", stdout);
 #endif
 
 	int n;

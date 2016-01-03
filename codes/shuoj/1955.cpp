@@ -1,23 +1,21 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <cmath>
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
 
 int main() {
-#ifndef ONLINE_JUDGE
+#ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
+	// freopen("data.out", "w", stdout);
 #endif
 
 	int t;
 	scanf("%d", &t);
 	while (t--) {
-		long long n;
+		ll n;
 		scanf("%lld", &n);
 		n = 8 * n - 7;
-		long long a = sqrt(n);
-		if (a * a == n && (a - 1) % 2 == 0) puts("2");
-		else puts("3");
+		ll a = sqrt(n);
+		puts(a * a == n && (a - 1) % 2 == 0 ? "2" : "3");
 	}
 	return 0;
 }
