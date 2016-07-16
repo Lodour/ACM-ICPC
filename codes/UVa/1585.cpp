@@ -1,27 +1,26 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-#define fastin ios_base::sync_with_stdio(0);cin.tie(0);
-#define set(a,b) memset(a,b,sizeof(a))
 
 int main() {
 #ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
 #endif
 
-	fastin;
 	int t;
-	cin >> t;
+	char s[88];
+	scanf("%d", &t);
 	while (t--) {
-		string s;
-		cin >> s; s += "X";
-		int ans = 0, cnt = 0;
-		for (int i = 0; i < (int)s.size(); i++) {
-			if (s[i] == 'X')
-				ans += (1 + cnt) * cnt / 2, cnt = 0;
-			else cnt++;
+		scanf("%s", s);
+		int res = 0, cnt = 0;
+		for (int i = 0; s[i]; i++) {
+			if (s[i] == 'O') cnt++;
+			else {
+				res += (1 + cnt) * cnt / 2;
+				cnt = 0;
+			}
 		}
-		cout << ans << endl;
+		res += (1 + cnt) * cnt / 2;
+		printf("%d\n", res);
 	}
-
 	return 0;
 }

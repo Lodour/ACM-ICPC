@@ -7,38 +7,36 @@ map<int, int> pre;
 
 int main() {
 #ifdef MANGOGAO
-	freopen("data.in", "r", stdin);
-	freopen("data.out", "w", stdout);
+    freopen("data.in", "r", stdin);
+    freopen("data.out", "w", stdout);
 #endif
 
-	int n, m;
-	while (~scanf("%d%d", &n, &m)) {
-		string ans;
-		pre.clear();
-		int len;
-		printf("%d/%d = %d.", n, m, n / m);
-		n %= m;
-		for (int i = 1;; i++) {
-			n %= m;
-			n *= 10;
-			ans += '0' + n / m;
-			if (pre[n]) {
-				len = i - pre[n];
-				break;
-			}
-			else pre[n] = i;
-		}
-		int p = ans.size() - len - 1;
-		for (int i = 0; i < (int)ans.size() - 1; i++) {
-			if (i == 50) {
-				printf("...");
-				break;
-			}
-			if (i == p) putchar('(');
-			putchar(ans[i]);
-		}
-		printf(")\n   %d = number of digits in repeating cycle\n\n", len);
-	}
+    int n, m;
+    while (~scanf("%d%d", &n, &m)) {
+        printf("%d/%d = %d.", n, m, n / m);
+        string ans;
+        pre.clear();
+        int len;
+        for (int i = 1;; i++) {
+            n = n % m * 10;
+            ans += '0' + n / m;
+            if (pre[n]) {
+                len = i - pre[n];
+                break;
+            }
+            pre[n] = i;
+        }
+        int p = ans.size() - len - 1;
+        for (int i = 0; i < (int)ans.size() - 1; i++) {
+            if (i == 50) {
+                printf("...");
+                break;
+            }
+            if (i == p) putchar('(');
+            putchar(ans[i]);
+        }
+        printf(")\n   %d = number of digits in repeating cycle\n\n", len);
+    }
 
-	return 0;
+    return 0;
 }

@@ -1,71 +1,79 @@
 #include <bits/stdc++.h>
-using namespace std;
 #define fastin ios_base::sync_with_stdio(0);cin.tie(0);
-#define set(a,b) memset(a,b,sizeof(a))
-#define pb push_back
-#define mp make_pair
+#define mp(a,b) make_pair(a,b)
+#define pb(a) push_back(a)
 #define X first
 #define Y second
-typedef vector<pair<int, string> > VP;
+#define set(a,b) memset(a,b,sizeof(a))
+using namespace std;
+typedef pair<int, string> PIS;
+typedef vector<PIS> VP;
+
+int n, m;
+string G[11];
+int a[11][11];
+
+void find(VP& v, int n, int m) {
+	string tmp;
+	for (int i = 0; i < n; i++) {
+		stringstream ss(G[i].substr(0, m));
+		for (int j = 0; j < m; j++)
+			if (G[i][j] != ' ' && (j == 0 || G[i][j - 1] == ' ')) {
+				ss >> tmp;
+				v.pb(mp(a[i][j], tmp));
+			}
+	}
+}
+
+void trans() {
+	string GG[11];
+	int aa[11][11] = {0};
+	for (int i = 0; i < m; i++) {
+		GG[i].resize(n);
+		for (int j = 0; j < n; j++) {
+			GG[i][j] = G[j][i];
+			aa[i][j] = a[j][i];
+		}
+	}
+	for (int i = 0; i < m; i++) {
+		G[i] = GG[i];
+		for (int j = 0; j < n; j++)
+			a[i][j] = aa[i][j];
+	}
+}
 
 int main() {
 #ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
 	freopen("data.out", "w", stdout);
 #endif
-
-	fastin;
-	int n, m, cnt = 0;
-	bool fi = 1;
-	string s[15];
-	int num[15][15];
+	fastin
+	int cnt = 0;
 	while (cin >> n && n && cin >> m) {
-		set(num, 0);
+		set(a, 0);
+		if (cnt) puts("");
 		int tot = 0;
 		for (int i = 0; i < n; i++) {
-			cin >> s[i];
-			s[i] += "*";
+			cin >> G[i];
 			for (int j = 0; j < m; j++) {
-				if (s[i][j] == '*') continue;
-				if (i == 0 || j == 0 || s[i - 1][j] == '*' || s[i][j - 1] == '*')
-					num[i][j] = ++tot;
+				if (G[i][j] == '*') G[i][j] = ' ';
+				else if (i == 0 || j == 0 || G[i - 1][j] == ' ' || G[i][j - 1] == ' ')
+					a[i][j] = ++tot;
 			}
 		}
-		for (int j = 0; j <= m; j++)
-			s[n][j] = '*';
-		string t;
+
 		VP va, vd;
-		// Across
-		t.clear();
-		for (int i = 0; i < n; i++)
-			for (int j = 0; j <= m; j++) {
-				if (s[i][j] == '*') {
-					if (t.size())
-						va.pb(mp(num[i][j - t.size()], t)), t.clear();
-				}
-				else t += s[i][j];
-			}
-		// Down
-		t.clear();
-		for (int j = 0; j < m; j++)
-			for (int i = 0; i <= n; i++) {
-				if (s[i][j] == '*') {
-					if (t.size())
-						vd.pb(mp(num[i - t.size()][j], t)), t.clear();
-				}
-				else t += s[i][j];
-			}
+		find(va, n, m);
+		trans();
+		find(vd, m, n);
 		sort(va.begin(), va.end());
 		sort(vd.begin(), vd.end());
-		if (!fi) puts("");
-		fi = 0;
 		printf("puzzle #%d:\n", ++cnt);
 		puts("Across");
-		for (int i = 0; i < (int)va.size(); i++)
-			printf("% 3d.%s\n", va[i].X, &va[i].Y[0]);
+		for (auto i : va) printf("% 3d.%s\n", i.X, i.Y.c_str());
 		puts("Down");
-		for (int i = 0; i < (int)vd.size(); i++)
-			printf("% 3d.%s\n", vd[i].X, &vd[i].Y[0]);
+		for (auto i : vd) printf("% 3d.%s\n", i.X, i.Y.c_str());
 	}
+
 	return 0;
 }

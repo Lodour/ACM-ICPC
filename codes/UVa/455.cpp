@@ -1,21 +1,21 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <cstdio>
+#include <cstring>
 using namespace std;
-#define fastin ios_base::sync_with_stdio(0);cin.tie(0);
-#define set(a,b) memset(a,b,sizeof(a))
 
-string s;
-bool check(int n) {
-	string base = s.substr(0, n);
-	for (int j = n; j < (int)s.size(); j += n)
-		if (s.substr(j, n) != base)
-			return 0;
+bool check(char s[], int t, int len) {
+	for (int i = 0; i < t; i++)
+		for (int j = i; j < len; j += t)
+			if (s[i] != s[j]) return 0;
+	return 1;
 }
 
-int solve() {
-	for (int i = 1; i < (int)s.size(); i++)
-		if (check(i))
-			return i;
-	return s.size();
+int solve(char s[]) {
+	int len = strlen(s);
+	for (int t = 1;; t++)
+		if (len % t == 0 && check(s, t, len))
+			return t;
+	return -1;
 }
 
 int main() {
@@ -23,14 +23,13 @@ int main() {
 	freopen("data.in", "r", stdin);
 #endif
 
-	fastin;
-	int T;
-	cin >> T;
-	while (T--) {
-		cin >> s;
-		cout << solve() << endl;
-		if (T) cout << endl;
+	int t, cnt = 0;
+	char s[88];
+	scanf("%d", &t);
+	for (int T = 0; T < t; T++) {
+		if (T) puts("");
+		scanf("%s", s);
+		printf("%d\n", solve(s));
 	}
-
 	return 0;
 }
