@@ -30,7 +30,6 @@ ll solve(int c, int n) {
 int main() {
 #ifdef MANGOGAO
 	freopen("data.in", "r", stdin);
-	// freopen("data.out", "w", stdout);
 #endif
 
 	int c, n;
